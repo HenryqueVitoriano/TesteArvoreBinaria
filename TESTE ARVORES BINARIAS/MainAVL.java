@@ -53,8 +53,8 @@ public class MainAVL {
 
     }
     public static Long calculaTempo(String URL) throws FileNotFoundException {
-        AVLTREE arvore = new AVLTREE();
-        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\EXERCICIOS_ LISTA 1\\InstrumentosDois\\");
+        AvlTree arvore = new AvlTree();
+        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\RELATORIO ARVORESBINARIAS\\InstrumentosDois\\");
         url.append(URL);
         String linha = "";
 
@@ -64,13 +64,13 @@ public class MainAVL {
         long tempoInicial =  System.nanoTime();
         long tempoMedio = 0;
         double contador = 0.0;
-
+        System.out.println("NOME DO TESTE: " + URL);
         try{
             while (sc.hasNext()){
                 linha = sc.nextLine();
 
                 long tempoInicialNo = System.nanoTime();
-                arvore.inserir(Long.parseLong(linha));
+                arvore.insertNode(Integer.parseInt(linha));
                 long tempoFinalNo = System.nanoTime();
 
                 double aux = tempoFinalNo - tempoInicialNo;
@@ -89,14 +89,31 @@ public class MainAVL {
         System.out.println();
 
 
-        try{
-            long profundidade = arvore.profundidadeTotal();
-            System.out.println("PROFUNDIDADE MAXIMA: "  + profundidade);
-        }catch (StackOverflowError error){
-            System.out.println("NÃO FOI POSSIVEL ACHAR A PROFUNDIDADE " );
-        }
-
+        nivelMedioNo(url, arvore);
         return (tempoFinal - tempoInicial) / 1000000;
     }
+    public static void nivelMedioNo(StringBuilder URL, BinarySearchTreeRecursive arvore) throws FileNotFoundException {
+        String linha = "";
+
+        File arquivo = new File(String.valueOf(URL));
+        Scanner sc =  new Scanner(arquivo);
+        double profundidade = 0;
+        int contador = 0;
+
+        try{
+            while (sc.hasNext()){
+                linha = sc.nextLine();
+                profundidade += arvore.encontrarProfundidade(Integer.parseInt(linha));
+                contador++;
+            }
+        }catch (StackOverflowError error){
+            System.out.println("PAROU NA LINHA: " + linha);
+            System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
+        }
+
+
+        System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
+    }
+
 
 }

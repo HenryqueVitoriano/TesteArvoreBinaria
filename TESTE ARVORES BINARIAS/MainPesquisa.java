@@ -54,11 +54,11 @@ public class MainPesquisa {
     }
 
     public static Long calculaTempo(String URL) throws FileNotFoundException {
-        BTree arvore = new BTree();
-        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\EXERCICIOS_ LISTA 1\\InstrumentosDois\\");
+        BinarySearchTreeRecursive arvore = new BinarySearchTreeRecursive();
+
+        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\RELATORIO ARVORESBINARIAS\\InstrumentosDois\\");
         url.append(URL);
         String linha = "";
-
         File arquivo = new File(String.valueOf(url));
         Scanner sc =  new Scanner(arquivo);
 
@@ -66,12 +66,14 @@ public class MainPesquisa {
         long tempoMedio = 0;
         double contador = 0.0;
 
+        System.out.println("NOME DO TESTE: " + URL);
         try{
             while (sc.hasNext()){
                 linha = sc.nextLine();
 
+
                 long tempoInicialNo = System.nanoTime();
-                arvore.add(Long.parseLong(linha));
+                arvore.insertNode(Integer.parseInt(linha));
                 long tempoFinalNo = System.nanoTime();
 
                 double aux = tempoFinalNo - tempoInicialNo;
@@ -86,20 +88,36 @@ public class MainPesquisa {
 
         long tempoFinal = System.nanoTime();
         double tempoMedioFinal = ((tempoMedio / contador));
-        System.out.printf("TEMPO MEDIO POR NÓ: %.10f MILISEGUNDOS " , tempoMedioFinal / 1000000);
-        System.out.println();
+        System.out.printf("TEMPO MEDIO POR NÓ: %.10f MILISEGUNDOS %n " , tempoMedioFinal / 1000000);
 
-        long profundidade;
 
-        try{
-            profundidade = arvore.encontrarProfundidade(Long.parseLong(linha));
-            System.out.println("PROFUNDIDADE MAXIMA: "  + profundidade);
-        }catch (StackOverflowError error){
-            System.out.println("NÃO FOI POSSIVEL ACHAR A PROFUNDIDADE " );
-        }
+        nivelMedioNo(String.valueOf(url), arvore);
 
 
         return (tempoFinal - tempoInicial) / 1000000;
+    }
+
+    public static void nivelMedioNo(String URL, BinarySearchTreeRecursive arvore) throws FileNotFoundException {
+        String linha = "";
+
+        File arquivo = new File(String.valueOf(URL));
+        Scanner sc =  new Scanner(arquivo);
+        double profundidade = 0;
+        int contador = 0;
+
+        try{
+            while (sc.hasNext()){
+                linha = sc.nextLine();
+                profundidade += arvore.encontrarProfundidade(Integer.parseInt(linha));
+                contador++;
+            }
+        }catch (StackOverflowError error){
+            System.out.println("PAROU NA LINHA: " + linha);
+            System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
+        }
+
+
+        System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
     }
 
 }

@@ -53,8 +53,8 @@ public class MainRedBlack {
     }
 
     public static Long calculaTempo(String URL) throws FileNotFoundException {
-        RBTree arvore = new RBTree();
-        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\EXERCICIOS_ LISTA 1\\InstrumentosDois\\");
+        RedBlackTree arvore = new RedBlackTree();
+        StringBuilder url = new StringBuilder("E:\\Java Faculdade\\4º SEMESTRE\\ESTRUTURA DE DADOS\\RELATORIO ARVORESBINARIAS\\InstrumentosDois\\");
         url.append(URL);
         String linha = "";
 
@@ -64,13 +64,13 @@ public class MainRedBlack {
         long tempoInicial =  System.nanoTime();
         long tempoMedio = 0;
         double contador = 0.0;
-
+        System.out.println("NOME DO TESTE: " + URL);
         try{
             while (sc.hasNext()){
                 linha = sc.nextLine();
 
                 long tempoInicialNo = System.nanoTime();
-                arvore.inserir(Long.parseLong(linha));
+                arvore.insertNode(Integer.parseInt(linha));
                 long tempoFinalNo = System.nanoTime();
 
                 double aux = tempoFinalNo - tempoInicialNo;
@@ -87,14 +87,31 @@ public class MainRedBlack {
         double tempoMedioFinal = ((tempoMedio / contador));
         System.out.printf("TEMPO MEDIO POR NÓ: %.10f MILISEGUNDOS " , tempoMedioFinal / 1000000);
         System.out.println();
-
-        try{
-            int profundidade = arvore.profundidadeTotal();
-            System.out.println("PROFUNDIDADE MAXIMA: "  + profundidade);
-        }catch (StackOverflowError error){
-            System.out.println("NÃO FOI POSSIVEL ACHAR A PROFUNDIDADE " );
-        }
+        nivelMedioNo(url, arvore);
 
         return (tempoFinal - tempoInicial) / 1000000;
     }
+    public static void nivelMedioNo(StringBuilder URL, RedBlackTree arvore) throws FileNotFoundException {
+        String linha = "";
+
+        File arquivo = new File(String.valueOf(URL));
+        Scanner sc =  new Scanner(arquivo);
+        double profundidade = 0;
+        int contador = 0;
+
+        try{
+            while (sc.hasNext()){
+                linha = sc.nextLine();
+                profundidade += arvore.encontrarProfundidade(Integer.parseInt(linha));
+                contador++;
+            }
+        }catch (StackOverflowError error){
+            System.out.println("PAROU NA LINHA: " + linha);
+            System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
+        }
+
+
+        System.out.printf("NIVEL MÉDIO DOS NÓS:  %.5f%n ", profundidade / contador);
+    }
+
 }
